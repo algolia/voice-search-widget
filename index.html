@@ -15,6 +15,11 @@
 
 
 <script>
+    
+    let myStream;
+    let inputPoint;
+    let scriptProcessor;
+
     const search = instantsearch({
         appId: 'latency',
         apiKey: '6be0576ff61c053d5f9a3225e2a90f76',
@@ -41,14 +46,10 @@
 
     search.addWidget({
         init: function(initOptions) {
-            console.log("initOpts", initOptions);
             const micBtn = document.querySelector('#mic');
 
             /*** Google Chrome API ***/
-            
-            window.SpeechRecognition = window.webkitSpeechRecognition || window.SpeechRecognition;
-
-            if ('SpeechRecognition' in window) {
+            if (window.webkitSpeechRecognition !== undefined) {
                 console.log("Chrome API is working");
                 var recognition = new webkitSpeechRecognition();
 
@@ -62,18 +63,131 @@
                 }
             } else {
                 console.log("Speech recognition Chrome API not supported");
+                
+                /*** GCP Speech-To-Text API ***/
+                var constraints = { 
+                    audio: {
+                        mandatory: {
+                            googEchoCancellation: 'false',
+                            googAutoGainControl: 'false',
+                            googNoiseSuppression: 'false',
+                            googHighpassFilter: 'false',
+                        },
+                    }
+                };
             }
             
 
-            //Start mic on click
+            //Start/Stop mic on click
             micBtn.addEventListener('click', function(e){
-                recognition.start(); //Chrome API
-                micBtn.innerHTML = '<i class="fas fa-dot-circle" style="color: red;"></i>';
+                if(myStream){
+                    //Stopping the mic
+                    myStream.getAudioTracks()[0].stop();
+                    myStream = null;
+                    scriptProcessor.removeEventListener('audioprocess', streamAudioData);
+                    micBtn.innerHTML = '<i class="fas fa-microphone"></i>';
+                }else{
+                    //Starting the mic
+
+                    /*** Chrome API ***/
+                    if (window.webkitSpeechRecognition !== undefined) {
+                        recognition.start(); 
+                    }else{
+                        /*** GCP Speech-To-Text API ***/
+                        navigator.mediaDevices.getUserMedia(constraints)
+                            .then((stream) => {
+                                startRecording(stream);
+                            })
+                            .catch(function(err) { console.log(err.name + ": " + err.message); }); // always check for errors at the end.
+
+                        micBtn.innerHTML = '<i class="fas fa-dot-circle" style="color: red;"></i>';
+                    }
+                }
             })
         },
     });
 
     search.start();
+
+
+function startRecording(stream) {
+    var audioContext = audioContext || new AudioContext();
+    if (!audioContext) {
+        return;
+    }
+    myStream = stream;
+
+    // AudioNode used to control the overall gain (or volume) of the audio graph
+    
+    inputPoint = audioContext.createGain();
+    const microphone = audioContext.createMediaStreamSource(myStream);
+    const analyser = audioContext.createAnalyser();
+    scriptProcessor = inputPoint.context.createScriptProcessor(2048, 2, 2);
+
+    microphone.connect(inputPoint);
+    inputPoint.connect(analyser);
+    inputPoint.connect(scriptProcessor);
+    scriptProcessor.connect(inputPoint.context.destination);
+    scriptProcessor.addEventListener('audioprocess', streamAudioData);
+}
+
+let callCount = 0;
+
+function streamAudioData(e){
+    const float32Samples = e.inputBuffer.getChannelData(0);
+    var dataAsInt16Array = new Int16Array(float32Samples.length);
+    
+    //Converting from float32 to linear16
+    for(i = 0; i < float32Samples.length; i++){
+        dataAsInt16Array[i] = convert(float32Samples[i]);
+    }
+
+    //Sending data to GCP
+    const apiKey = "AIzaSyAOaQyYfTO1wJggs52g1WhEgK8TiVvv45s";
+    const url = "https://speech.googleapis.com/v1/speech:recognize?key="+apiKey;
+
+    let dataToSend = {
+      "config": {
+        "encoding": "LINEAR16",
+        "sampleRateHertz": 16000,
+        "languageCode": "en-US",
+        "maxAlternatives": 5,
+        "profanityFilter": false,
+        "enableWordTimeOffsets": true
+      },
+      //"singleUtterance": true,
+      "audio": {
+        "content": window.btoa(dataAsInt16Array),
+      }
+    };
+
+    let body = {
+      headers: {
+        "content-type": "application/json"
+      },
+      method: 'POST',
+      mode: 'no-cors',
+      body: JSON.stringify(dataToSend),
+    };
+
+    console.log("data", dataToSend);
+
+    // if(callCount < 3){
+        fetch(url, body)
+            .then((response) => {
+                console.log("response", response);
+            })
+            .catch((e) => {
+                console.log("error", e);
+            })
+        callCount++;
+    // }
+}
+
+function convert(n) {
+    var v = n < 0 ? n * 32768 : n * 32767;       // convert in range [-32768, 32767]
+    return Math.max(-32768, Math.min(32768, v)); // clamp
+}
 
 </script>
 
