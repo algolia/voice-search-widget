@@ -1,5 +1,5 @@
+<!DOCTYPE html>
 <html>
-
 <head>
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/instantsearch.js@2.10.4/dist/instantsearch.min.css">
     <script src="https://cdn.jsdelivr.net/npm/instantsearch.js@2.10.4"></script>
@@ -13,8 +13,15 @@
     <div id="hits"></div>
 </body>
 
-
+<script src="http://localhost:8080/socket.io/socket.io.js"></script>
 <script>
+
+    var socket = io.connect("http://localhost:8080/");
+
+    socket.on("connect", function() {
+        // Do stuff when we connect to the server
+        console.log("connected");
+    });
     
     let myStream;
     let inputPoint;
@@ -135,6 +142,7 @@ let callCount = 0;
 
 function streamAudioData(e){
     const float32Samples = e.inputBuffer.getChannelData(0);
+    console.log("float", float32Samples);
     var dataAsInt16Array = new Int16Array(float32Samples.length);
     
     //Converting from float32 to linear16
@@ -143,44 +151,46 @@ function streamAudioData(e){
     }
 
     //Sending data to GCP
-    const apiKey = "AIzaSyAOaQyYfTO1wJggs52g1WhEgK8TiVvv45s";
-    const url = "https://speech.googleapis.com/v1/speech:recognize?key="+apiKey;
+    //const apiKey = "AIzaSyAOaQyYfTO1wJggs52g1WhEgK8TiVvv45s";
+    //const url = "https://speech.googleapis.com/v1/speech:recognize?key="+apiKey;
 
-    let dataToSend = {
-      "config": {
-        "encoding": "LINEAR16",
-        "sampleRateHertz": 16000,
-        "languageCode": "en-US",
-        "maxAlternatives": 5,
-        "profanityFilter": false,
-        "enableWordTimeOffsets": true
-      },
-      //"singleUtterance": true,
-      "audio": {
-        "content": window.btoa(dataAsInt16Array),
-      }
-    };
+    // let dataToSend = {
+    //   "config": {
+    //     "encoding": "LINEAR16",
+    //     "sampleRateHertz": 16000,
+    //     "languageCode": "en-US",
+    //     "maxAlternatives": 5,
+    //     "profanityFilter": false,
+    //     "enableWordTimeOffsets": true
+    //   },
+    //   //"singleUtterance": true,
+    //   "audio": {
+    //     "content": window.btoa(dataAsInt16Array),
+    //   }
+    // };
 
-    let body = {
-      headers: {
-        "content-type": "application/json"
-      },
-      method: 'POST',
-      mode: 'no-cors',
-      body: JSON.stringify(dataToSend),
-    };
+    // let body = {
+    //   headers: {
+    //     "content-type": "application/json"
+    //   },
+    //   method: 'POST',
+    //   mode: 'no-cors',
+    //   body: JSON.stringify(dataToSend),
+    // };
 
-    console.log("data", dataToSend);
+    //console.log("data", dataToSend);
+
+    socket.emit("audiodata", dataAsInt16Array);
 
     // if(callCount < 3){
-        fetch(url, body)
-            .then((response) => {
-                console.log("response", response);
-            })
-            .catch((e) => {
-                console.log("error", e);
-            })
-        callCount++;
+        // fetch(url, body)
+        //     .then((response) => {
+        //         console.log("response", response);
+        //     })
+        //     .catch((e) => {
+        //         console.log("error", e);
+        //     })
+        // callCount++;
     // }
 }
 
@@ -190,5 +200,4 @@ function convert(n) {
 }
 
 </script>
-
 </html>
