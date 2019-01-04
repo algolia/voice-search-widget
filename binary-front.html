@@ -13,19 +13,18 @@
     <div id="hits"></div>
 </body>
 
-<script src="http://localhost:8080/socket.io/socket.io.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/binaryjs@0.2.1/dist/binary.js"></script>
+
 <script>
 
-    var socket = io.connect("http://localhost:8080/");
-
-    socket.on("connect", function() {
-        // Do stuff when we connect to the server
-        console.log("connected");
-    });
+    var client = new BinaryClient('ws://localhost:8080');
     
     let myStream;
     let inputPoint;
     let scriptProcessor;
+
+    client.on('open', function () {
+    });
 
     const search = instantsearch({
         appId: 'latency',
@@ -93,6 +92,7 @@
                     myStream = null;
                     scriptProcessor.removeEventListener('audioprocess', streamAudioData);
                     micBtn.innerHTML = '<i class="fas fa-microphone"></i>';
+                    window.Stream.end();
                 }else{
                     //Starting the mic
 
@@ -118,6 +118,8 @@
 
 
 function startRecording(stream) {
+    window.Stream = client.createStream();
+    
     var audioContext = audioContext || new AudioContext();
     if (!audioContext) {
         return;
@@ -138,77 +140,36 @@ function startRecording(stream) {
     scriptProcessor.addEventListener('audioprocess', streamAudioData);
 }
 
-let callCount = 0;
-
 function streamAudioData(e){
     const float32Samples = e.inputBuffer.getChannelData(0);
-    console.log("float", float32Samples);
-    var dataAsInt16Array = convertFloat32ToInt16(float32Samples);
-
-    socket.emit("audiodata", dataAsInt16Array);
-
-
-    //var dataAsInt16Array = new Int16Array(float32Samplesstrlength);
-    
-    //Converting from float32 to linear16
-    // for(i = 0; i < float32Samples.length; i++){
-    //     dataAsInt16Array[i] = convert(float32Samples[i]);
-    // }
-
-    //Sending data to GCP
-    //const apiKey = "AIzaSyAOaQyYfTO1wJggs52g1WhEgK8TiVvv45s";
-    //const url = "https://speech.googleapis.com/v1/speech:recognize?key="+apiKey;
-
-    // let dataToSend = {
-    //   "config": {
-    //     "encoding": "LINEAR16",
-    //     "sampleRateHertz": 16000,
-    //     "languageCode": "en-US",
-    //     "maxAlternatives": 5,
-    //     "profanityFilter": false,
-    //     "enableWordTimeOffsets": true
-    //   },
-    //   //"singleUtterance": true,
-    //   "audio": {
-    //     "content": window.btoa(dataAsInt16Array),
-    //   }
-    // };
-
-    // let body = {
-    //   headers: {
-    //     "content-type": "application/json"
-    //   },
-    //   method: 'POST',
-    //   mode: 'no-cors',
-    //   body: JSON.stringify(dataToSend),
-    // };
-
-    //console.log("data", dataToSend);
-
-    // if(callCount < 3){
-        // fetch(url, body)
-        //     .then((response) => {
-        //         console.log("response", response);
-        //     })
-        //     .catch((e) => {
-        //         console.log("error", e);
-        //     })
-        // callCount++;
-    // }
+    window.Stream.write(downsampleBuffer(float32Samples, 44100, 16000));
 }
 
-// function convert(n) {
-//     var v = n < 0 ? n * 32768 : n * 32767;       // convert in range [-32768, 32767]
-//     return Math.max(-32768, Math.min(32768, v)); // clamp
-// }
+function downsampleBuffer(buffer, sampleRate, outSampleRate) {
+    if (outSampleRate == sampleRate) {
+        return buffer;
+    }
+    if (outSampleRate > sampleRate) {
+        throw "downsampling rate show be smaller than original sample rate";
+    }
+    var sampleRateRatio = sampleRate / outSampleRate;
+    var newLength = Math.round(buffer.length / sampleRateRatio);
+    var result = new Int16Array(newLength);
+    var offsetResult = 0;
+    var offsetBuffer = 0;
+    while (offsetResult < result.length) {
+        var nextOffsetBuffer = Math.round((offsetResult + 1) * sampleRateRatio);
+        var accum = 0, count = 0;
+        for (var i = offsetBuffer; i < nextOffsetBuffer && i < buffer.length; i++) {
+            accum += buffer[i];
+            count++;
+        }
 
-function convertFloat32ToInt16(buffer) {
-  l = buffer.length;
-  buf = new Int16Array(l);
-  while (l--) {
-    buf[l] = Math.min(1, buffer[l])*0x7FFF;
-  }
-  return buf.buffer;
+        result[offsetResult] = Math.min(1, accum / count)*0x7FFF;
+        offsetResult++;
+        offsetBuffer = nextOffsetBuffer;
+    }
+    return result.buffer;
 }
 
 </script>

@@ -10,10 +10,15 @@
   "license": "ISC",
   "dependencies": {
     "@google-cloud/speech": "^2.1.1",
+    "binaryjs": "^0.2.1",
     "express": "^4.16.4",
     "node-record-lpcm16": "^0.3.1",
     "socket.io": "^2.2.0",
     "socket.io-client": "^2.2.0",
-    "socket.io-stream": "^0.9.1"
+    "socket.io-stream": "^0.9.1",
+    "wav": "^1.0.2"
+  },
+  "devDependencies": {
+    "nodemon": "^1.18.9"
   }
 }
