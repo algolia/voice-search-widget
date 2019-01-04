@@ -36,7 +36,9 @@ io.on('connection', (socket) => {
 
     socket.on('audiodata', (data) => { 
         console.log(data);
-        recognizeStream.write(data);
+        if(recognizeStream){
+            recognizeStream.write(data);
+        }
     });
 
     socket.on('endStream', () => { 

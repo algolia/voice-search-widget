@@ -129,10 +129,9 @@ function startRecording(stream) {
 
     socket.emit('startStream', {});
     
-    var audioContext = audioContext || new AudioContext();
-    if (!audioContext) {
-        return;
-    }
+    AudioContext = window.AudioContext || window.webkitAudioContext;
+	audioContext = new AudioContext();
+
     myStream = stream;
     
     inputPoint = audioContext.createGain();
