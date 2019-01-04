@@ -1,7 +1,6 @@
 var socket = io.connect("http://localhost:8080/");
 
 socket.on("connect", function() {
-  // Do stuff when we connect to the server
   console.log("connected");
 });
 
@@ -17,7 +16,16 @@ search.addWidget(
     container: "#hits",
     templates: {
       empty: "No results",
-      item: "<em>Hit {{objectID}}</em>: {{{_highlightResult.name.value}}}"
+      item: `
+            <div class="item centered">
+                <div><img src="{{image}}" alt=""></div>
+                <div class="item-content">
+                    <p class="name">{{{_highlightResult.name.value}}}</p>
+                    <p class="desc">{{{_highlightResult.description.value}}}</p>
+                    <p class="price">Price: {{{price}}}</p>
+                </div>
+            </div>
+            <br>`
     }
   })
 );
