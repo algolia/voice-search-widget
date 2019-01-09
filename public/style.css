@@ -1,6 +1,8 @@
-em {
+mark {
   font-weight: bold;
   font-style: unset;
+  background-color: rgba(216, 216, 216, 0.75);
+  padding: 0.2;
 }
 
 .centered {
@@ -13,27 +15,17 @@ em {
   margin-top: 20px;
 }
 
-#mic {
-  background-color: #d8d8d8;
-  border: 1px solid #acaa9f;
-  border-radius: 5px;
-  width: 46px;
-  height: 46px;
-  font-size: 15px;
-  margin-left: 10px;
-}
-
 #hits {
   margin-top: 20px;
 }
 
-.item {
-  width: 700px;
+img {
+  width: 80%;
+  height: 200px;
+  object-fit: contain;
 }
 
-.item img {
-  margin-right: 20px;
-  width: 150px;
-  height: 150px;
-  object-fit: contain;
+
+#pagination{
+  margin-top: 20px;
 }

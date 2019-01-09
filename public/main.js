@@ -7,9 +7,8 @@ socket.on("connect", function() {
 });
 
 const search = instantsearch({
-  appId: "latency",
-  apiKey: "6be0576ff61c053d5f9a3225e2a90f76",
   indexName: "instant_search",
+  searchClient: algoliasearch('latency', '6be0576ff61c053d5f9a3225e2a90f76'),
   routing: true
 });
 
@@ -19,8 +18,8 @@ search.addWidget(
     templates: {
       empty: "No results",
       item: `
-            <div class="item centered">
-                <div><img src="{{image}}" alt=""></div>
+            <div class="item">
+                <div class="centered"><img src="{{image}}" alt=""></div>
                 <div class="item-content">
                     <p class="name">{{{_highlightResult.name.value}}}</p>
                     <p class="desc">{{{_highlightResult.description.value}}}</p>
@@ -33,17 +32,23 @@ search.addWidget(
 );
 
 search.addWidget(
-  instantsearch.widgets.searchBox({
-    container: "#search-bar",
-    placeholder: "Search for products"
+  new VoiceWidget({
+    container: "#voice-search",
+    placeholder: "Search for products and brands",
+    socket: socket,
+    processor: "gcp"
   })
 );
 
 search.addWidget(
-  new VoiceWidget({
-    container: "#mic",
-    socket: socket,
-    processor: "gcp"
+  instantsearch.widgets.pagination({
+    container: "#pagination"
+  })
+);
+
+search.addWidget(
+  instantsearch.widgets.stats({
+    container: "#stats-container"
   })
 );
 

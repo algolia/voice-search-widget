@@ -1,17 +1,13 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <link rel="stylesheet" type="text/css" href="style.css" />
     <link
       rel="stylesheet"
-      type="text/css"
-      href="https://cdn.jsdelivr.net/npm/instantsearch.js@2.10.4/dist/instantsearch.min.css"
+      href="https://cdn.jsdelivr.net/npm/instantsearch.css@7.1.0/themes/reset-min.css"
     />
-    <script src="https://cdn.jsdelivr.net/npm/instantsearch.js@2.10.4"></script>
     <link
       rel="stylesheet"
-      type="text/css"
-      href="https://cdn.jsdelivr.net/npm/instantsearch.js@2.10.4/dist/instantsearch-theme-algolia.min.css"
+      href="https://cdn.jsdelivr.net/npm/instantsearch.css@7.1.0/themes/algolia-min.css"
     />
     <link
       rel="stylesheet"
@@ -19,19 +15,24 @@
       integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU"
       crossorigin="anonymous"
     />
+    <link rel="stylesheet" type="text/css" href="style.css" />
   </head>
 
   <body class="centered">
     <div>
       <div class="centered top">
-        <div id="search-bar"></div>
-        <button id="mic"><i class="fas fa-microphone"></i></button>
+        <div>
+          <div id="voice-search"></div>
+        </div>
       </div>
-      <div class="centered"><div id="hits"></div></div>
+      <div id="stats-container"></div>
+      <div id="hits"></div>
+      <div id="pagination"></div>
     </div>
   </body>
 
+  <script src="https://cdn.jsdelivr.net/npm/algoliasearch@3.32.0/dist/algoliasearchLite.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/instantsearch.js@3.0.0/dist/instantsearch.production.min.js"></script>
   <script src="http://localhost:8181/socket.io/socket.io.js"></script>
-  <!-- <script src="voice-widget/voice-widget.js"></script> -->
   <script src="main.js" type="module"></script>
 </html>
