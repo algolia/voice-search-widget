@@ -14,7 +14,7 @@ class VoiceWidget {
     const micBtn = document.querySelector(this.container);
 
     /*** Google Chrome API ***/
-    if (this.isChromeAPIAvailable()) {
+    if (this._isChromeAPIAvailable()) {
       chromeAPI.configureAPI(micBtn, initOptions);
     } else {
       /*** GCP Speech-To-Text API ***/
@@ -25,7 +25,7 @@ class VoiceWidget {
     let that = this;
     micBtn.addEventListener("click", function(e) {
       /*** Chrome API ***/
-      if (that.isChromeAPIAvailable()) {
+      if (that._isChromeAPIAvailable()) {
         chromeAPI.startTranscription(micBtn);
       } else {
         if (that.processor == "gcp") {
@@ -42,7 +42,7 @@ class VoiceWidget {
     });
   }
 
-  isChromeAPIAvailable() {
+  _isChromeAPIAvailable() {
     if (window.webkitSpeechRecognition !== undefined) {
       return true;
     } else {

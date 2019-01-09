@@ -92,7 +92,7 @@ class GcpAPI {
   }
 
   _downsampleBuffer(buffer, sampleRate, outSampleRate) {
-    if (outSampleRate == sampleRate) {
+    if (outSampleRate === sampleRate) {
       return buffer;
     }
     if (outSampleRate > sampleRate) {
