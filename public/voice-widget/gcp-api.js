@@ -34,8 +34,6 @@ class GcpAPI {
       .catch(function(err) {
         console.log(err.name + ": " + err.message);
       }); // always check for errors at the end.
-
-    // mic.innerHTML = '<i class="fas fa-dot-circle" style="color: red;"></i>';
   }
 
   stopTranscription(mic, socket) {
@@ -47,7 +45,6 @@ class GcpAPI {
         "audioprocess",
         this._streamAudioData
       );
-      // mic.innerHTML = '<i class="fas fa-microphone"></i>';
       socket.emit("endStream", {});
     }
   }
