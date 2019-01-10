@@ -1,4 +1,6 @@
-var socket = io.connect("http://localhost:8080/");
+import VoiceWidget from "./voice-widget/voice-widget.js";
+
+var socket = io.connect("http://localhost:8181/");
 
 socket.on("connect", function() {
   console.log("connected");
@@ -37,6 +39,12 @@ search.addWidget(
   })
 );
 
-search.addWidget(voiceWidget);
+search.addWidget(
+  new VoiceWidget({
+    container: "#mic",
+    socket: socket,
+    processor: "gcp"
+  })
+);
 
 search.start();
