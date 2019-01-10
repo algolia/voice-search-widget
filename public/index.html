@@ -18,16 +18,35 @@
     <link rel="stylesheet" type="text/css" href="style.css" />
   </head>
 
-  <body class="centered">
+  <body>
+    <h1>Voice Search Demo</h1>
     <div>
       <div class="centered top">
-        <div>
-          <div id="voice-search"></div>
-        </div>
+        <div><div id="voice-search"></div></div>
       </div>
       <div id="stats-container"></div>
-      <div id="hits"></div>
-      <div id="pagination"></div>
+      <div class="content">
+        <div class="left-part">
+          <div class="facets">
+            <div class="brand">
+              <h4>Brands</h4>
+              <div id="brand"></div>
+            </div>
+            <div class="categories">
+              <h4>Categories</h4>
+              <div id="categories"></div>
+            </div>
+            <div class="price">
+              <h4>Price</h4>
+              <div id="price"></div>
+            </div>
+          </div>
+        </div>
+        <div class="right-part">
+          <div id="hits"></div>
+          <div id="pagination"></div>
+        </div>
+      </div>
     </div>
   </body>
 

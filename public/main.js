@@ -7,10 +7,16 @@ socket.on("connect", function() {
 });
 
 const search = instantsearch({
-  indexName: "instant_search",
-  searchClient: algoliasearch('latency', '6be0576ff61c053d5f9a3225e2a90f76'),
+  indexName: "voice_search_demo",
+  searchClient: algoliasearch("XC1DYSAPBX", "3720c40761477e74cb938856acebfa31"),
   routing: true
 });
+
+search.addWidget(
+  instantsearch.widgets.configure({
+    hitsPerPage: 9
+  })
+);
 
 search.addWidget(
   instantsearch.widgets.hits({
@@ -22,7 +28,7 @@ search.addWidget(
                 <div class="centered"><img src="{{image}}" alt=""></div>
                 <div class="item-content">
                     <p class="name">{{{_highlightResult.name.value}}}</p>
-                    <p class="desc">{{{_highlightResult.description.value}}}</p>
+                    <p class="desc">{{{_snippetResult.description.value}}}...</p>
                     <p class="price">Price: {{{price}}}</p>
                 </div>
             </div>
@@ -49,6 +55,31 @@ search.addWidget(
 search.addWidget(
   instantsearch.widgets.stats({
     container: "#stats-container"
+  })
+);
+
+search.addWidget(
+  instantsearch.widgets.refinementList({
+    container: "#brand",
+    attribute: "brand",
+    limit: 5,
+    showMore: true,
+    searchable: true,
+    searchablePlaceholder: "Search our brands"
+  })
+);
+
+search.addWidget(
+  instantsearch.widgets.refinementList({
+    container: "#categories",
+    attribute: "categories"
+  })
+);
+
+search.addWidget(
+  instantsearch.widgets.rangeSlider({
+    container: "#price",
+    attribute: "price"
   })
 );
 
