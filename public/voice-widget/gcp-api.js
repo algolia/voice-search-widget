@@ -36,7 +36,7 @@ class GcpAPI {
       }); // always check for errors at the end.
   }
 
-  stopTranscription(mic, socket) {
+  stopTranscription(socket) {
     if (this.myStream) {
       //Stopping the mic
       this.myStream.getAudioTracks()[0].stop();

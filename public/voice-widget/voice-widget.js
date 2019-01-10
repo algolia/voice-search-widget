@@ -115,6 +115,17 @@ class VoiceWidget {
       gcpAPI.configureAPI(this.socket, searchInput, initOptions);
     }
 
+    //Stopping the speech recognition if the user stopped talking
+    this.socket.on("endSpeechRecognition", (_) => {
+      if (that.processor == "gcp") {
+        gcpAPI.stopTranscription(this.socket);
+      }
+      this.isTranscripting = false;
+      mic.innerHTML = '<i class="fas fa-microphone"></i>';
+      wave.classList.add("hidden");
+      searchInput.style.paddingLeft = "10px";
+    });
+
     //Start/Stop mic on click
     let that = this;
     mic.addEventListener("click", function(e) {
@@ -127,15 +138,15 @@ class VoiceWidget {
       } else {
         if (that.processor == "gcp") {
           /*** GCP Speech-To-Text API ***/
-          if (this.isTranscripting) {
-            gcpAPI.stopTranscription(mic, that.socket);
-            this.isTranscripting = false;
+          if (that.isTranscripting) {
+            gcpAPI.stopTranscription(that.socket);
+            that.isTranscripting = false;
             mic.innerHTML = '<i class="fas fa-microphone"></i>';
             wave.classList.add("hidden");
             searchInput.style.paddingLeft = "10px";
           } else {
             gcpAPI.startTranscription(mic, that.socket);
-            this.isTranscripting = true;
+            that.isTranscripting = true;
           }
         }
       }
