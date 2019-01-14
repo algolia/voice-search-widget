@@ -12,7 +12,7 @@ const search = instantsearch({
 
 search.addWidget(
   instantsearch.widgets.configure({
-    hitsPerPage: 9
+    hitsPerPage: 12
   })
 );
 
@@ -24,12 +24,13 @@ search.addWidget(
       item: `
             <div class="item">
                 <div class="centered"><img src="{{image}}" alt=""></div>
+                <div class="centered"><div class="add-to-cart"><i class="fas fa-cart-plus"></i> Add to Cart</div></div>
                 <div class="item-content">
+                    <p class="brand">{{{_highlightResult.brand.value}}}</p>
                     <p class="name">{{{_highlightResult.name.value}}}</p>
-                    <p class="desc">{{{_snippetResult.description.value}}}...</p>
-                    <p class="price">Price: {{{price}}}</p>
                 </div>
             </div>
+            <p class="price">Price: {{{price}}}€</p>
             <br>`
     }
   })
