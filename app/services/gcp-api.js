@@ -31,11 +31,9 @@ class GcpAPI {
 
         io.emit("dataFromGCP", data.results[0].alternatives[0].transcript);
 
-        // if end of utterance, let's restart stream
-        // this is a small hack. After 65 seconds of silence, the stream will still throw an error for speech length limit
+        //Stopping the speech recognition if the user stopped talking
         if (data.results[0] && data.results[0].isFinal) {
-          this.stopRecognitionStream();
-          this.startRecognitionStream(io);
+          io.emit("endSpeechRecognition", {});
         }
       });
   }

@@ -1,6 +1,12 @@
-em {
+body {
+  padding: 0 20px;
+}
+
+mark {
   font-weight: bold;
   font-style: unset;
+  background-color: rgba(216, 216, 216, 0.75);
+  padding: 0.2;
 }
 
 .centered {
@@ -12,28 +18,45 @@ em {
 .top {
   margin-top: 20px;
 }
+.content {
+  display: flex;
+  align-items: top;
+  justify-content: space-between;
+}
 
-#mic {
-  background-color: #d8d8d8;
-  border: 1px solid #acaa9f;
-  border-radius: 5px;
-  width: 46px;
-  height: 46px;
-  font-size: 15px;
-  margin-left: 10px;
+.left-part {
+  width: 30%;
+  display: flex;
+  align-items: top;
+  justify-content: left;
+}
+
+.right-part {
+  width: 70%;
 }
 
 #hits {
   margin-top: 20px;
 }
 
-.item {
-  width: 700px;
+.ais-Hits-item {
+  width: calc(33% - 1rem);
 }
 
-.item img {
-  margin-right: 20px;
-  width: 150px;
-  height: 150px;
+img {
+  width: 80%;
+  height: 200px;
   object-fit: contain;
+}
+
+.item-content .price {
+  padding: 10px;
+  background-color: #4195d5;
+  color: white;
+  border-radius: 5px;
+  float: right;
+}
+
+#pagination {
+  margin-top: 20px;
 }

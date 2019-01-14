@@ -16,15 +16,15 @@ class GcpAPI {
     };
   }
 
-  configureAPI(socket, initOptions) {
+  configureAPI(socket, searchInput, initOptions) {
     socket.on("dataFromGCP", data => {
-      console.log("dataFromGCP", data);
       let query = data;
       initOptions.helper.setQuery(query).search(); //Set the query and search
+      searchInput.value = query;
     });
   }
 
-  startTranscription(micBtn, socket) {
+  startTranscription(mic, socket) {
     navigator.mediaDevices
       .getUserMedia(this.constraints)
       .then(stream => {
@@ -33,11 +33,9 @@ class GcpAPI {
       .catch(function(err) {
         console.log(err.name + ": " + err.message);
       }); // always check for errors at the end.
-
-    micBtn.innerHTML = '<i class="fas fa-dot-circle" style="color: red;"></i>';
   }
 
-  stopTranscription(micBtn, socket) {
+  stopTranscription(socket) {
     if (this.myStream) {
       //Stopping the mic
       this.myStream.getAudioTracks()[0].stop();
@@ -46,7 +44,6 @@ class GcpAPI {
         "audioprocess",
         this._streamAudioData
       );
-      micBtn.innerHTML = '<i class="fas fa-microphone"></i>';
       socket.emit("endStream", {});
     }
   }

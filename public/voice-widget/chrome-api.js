@@ -3,23 +3,25 @@ class ChromeAPI {
     this.recognition = null;
   }
 
-  configureAPI(micBtn, initOptions) {
+  configureAPI(mic, searchInput, wave, initOptions) {
     this.recognition = new webkitSpeechRecognition();
-    console.log("Chrome API is working");
 
     this.recognition.interimResults = true;
 
     this.recognition.onresult = function(event) {
-      console.log(event.results[0][0]);
       let query = event.results[0][0].transcript;
       initOptions.helper.setQuery(query).search(); //Set the query and search
-      micBtn.innerHTML = '<i class="fas fa-microphone"></i>';
+      setTimeout(function(){
+        mic.innerHTML = '<i class="fas fa-microphone"></i>';
+        wave.classList.add("hidden");
+        searchInput.style.paddingLeft = "10px";
+      }, 1000);
+      searchInput.value = query;
     };
   }
 
-  startTranscription(micBtn) {
+  startTranscription(mic, searchInput) {
     this.recognition.start();
-    micBtn.innerHTML = '<i class="fas fa-dot-circle" style="color: red;"></i>';
   }
 }
 
