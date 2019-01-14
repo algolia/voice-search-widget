@@ -18,7 +18,6 @@ class GcpAPI {
 
   configureAPI(socket, searchInput, initOptions) {
     socket.on("dataFromGCP", data => {
-      console.log("dataFromGCP", data);
       let query = data;
       initOptions.helper.setQuery(query).search(); //Set the query and search
       searchInput.value = query;

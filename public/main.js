@@ -2,9 +2,7 @@ import VoiceWidget from "./voice-widget/voice-widget.js";
 
 var socket = io.connect("http://localhost:8181/");
 
-socket.on("connect", function() {
-  console.log("connected");
-});
+socket.on("connect", function() {});
 
 const search = instantsearch({
   indexName: "voice_search_demo",
