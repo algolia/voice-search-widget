@@ -149,7 +149,7 @@ nav ul{
 .ais-Pagination-link{
   color: #576cF6;
 }
-/* 
-.algolia-search-input{
-  width: 250px !important;
-} */
+
+#algolia-search-input{
+  width: 270px;
+}
