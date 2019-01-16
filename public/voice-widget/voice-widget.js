@@ -64,7 +64,7 @@ class VoiceWidget {
     //Start/Stop mic on click
     let that = this;
     mic.addEventListener("click", function(e) {
-      mic.innerHTML = '<i class="fas fa-dot-circle" style="color: red;"></i>';
+      mic.innerHTML = '<i class="fas fa-dot-circle blink" style="color: red;"></i>';
       wave.classList.remove("hidden");
       searchInput.style.paddingLeft = "55px";
       /*** Chrome API ***/

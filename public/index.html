@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/instantsearch.css@7.1.0/themes/reset-min.css"
@@ -15,17 +16,30 @@
       integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU"
       crossorigin="anonymous"
     />
-    <link rel="stylesheet" type="text/css" href="voice-widget/voice-widget.css" />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="voice-widget/voice-widget.css"
+    />
     <link rel="stylesheet" type="text/css" href="style.css" />
   </head>
 
   <body>
     <nav>
-      <h1>Algolia <i class="fas fa-heart"></i> Voice Search</h1>
+      <h1>
+        <span class="hide-mobile hide-tablet"
+          >Algolia <i class="fas fa-heart"></i> </span
+        >Voice Search
+      </h1>
       <ul>
         <li id="voice-search"></li>
-        <li>Sign In</li>
-        <li><i class="fas fa-cart-arrow-down"></i></li>
+        <li class="hide-mobile hide-tablet">
+          <i class="fas fa-user"></i><span class="hide-mobile"> Sign In</span>
+        </li>
+        <li class="hide-mobile hide-tablet">
+          <i class="fas fa-cart-arrow-down"></i
+          ><span class="hide-mobile"> Cart</span>
+        </li>
       </ul>
     </nav>
     <div class="content">
