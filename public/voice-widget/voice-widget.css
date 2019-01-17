@@ -6,6 +6,9 @@
     height: 46px;
     font-size: 15px;
     margin-left: 10px;
+    outline: none;
+    cursor: pointer;
+    display: block;
 }
 
 #algolia-search-input{
@@ -20,6 +23,21 @@
 
 .hidden{
     display: none;
+}
+
+.blink {
+    animation: blink 2s steps(5, start) infinite;
+    -webkit-animation: blink 1s steps(5, start) infinite;
+}
+@keyframes blink {
+    to {
+        visibility: hidden;
+    }
+}
+@-webkit-keyframes blink {
+    to {
+        visibility: hidden;
+    }
 }
 
 #bars {
@@ -45,7 +63,7 @@
     }
     100% {
         opacity: 1;       
-        height: 28px;        
+        height: 28px;
     }
 }
 
