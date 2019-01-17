@@ -7,6 +7,8 @@
     font-size: 15px;
     margin-left: 10px;
     outline: none;
+    cursor: pointer;
+    display: block;
 }
 
 #algolia-search-input{

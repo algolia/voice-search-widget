@@ -2,7 +2,7 @@ body {
   padding: 0;
   margin: 0;
   background-color: #f1f1f1;
-  font-family: Open Sans, sans-serif;
+  font-family: "Open Sans", sans-serif;
 }
 
 mark {
@@ -154,7 +154,7 @@ nav ul {
 }
 
 #algolia-search-input {
-  width: 270px;
+  width: 320px;
   border-radius: 50px;
   border: 1px solid white;
   background-color: #5468ff;
@@ -182,25 +182,25 @@ nav ul {
 }
 
 #algolia-mic {
-  background-color: unset;
-  border: none;
-  color: white;
-  margin-left: unset;
-  margin-right: -30px;
+  background-color: white;
+  border: 1px solid white;
+  margin-left: -46px;
+  border-radius: 50px;
+  color: #5468ff;
+  font-size: 18px;
 }
-
 
 /*TABLET*/
 @media screen and (max-width: 1060px) and (min-width: 656px) {
-  .hide-tablet{
+  .hide-tablet {
     display: none;
   }
 
-  nav h1{
-    width: 35%
+  nav h1 {
+    width: 35%;
   }
 
-  nav ul{
+  nav ul {
     width: 65%;
   }
 
@@ -211,48 +211,50 @@ nav ul {
 
 /*MOBILE*/
 @media screen and (max-width: 656px) {
-  .hide-mobile{
+  .hide-mobile {
     display: none;
   }
 
-  nav{
+  nav {
     height: 74px;
   }
 
-  nav h1{
-    width: 40%
+  nav h1 {
+    width: 40%;
   }
 
-  nav ul{
+  nav ul {
     width: 60%;
   }
 
-  #algolia-search-input{
-    width: 170px;
+  #algolia-search-input {
+    width: 190px;
     height: 33px;
     padding-left: 10px !important;
   }
 
   #algolia-mic {
-    margin-left: -10px;
-    margin-right: unset;
-    font-size: 18px;
+    margin-left: -32px;
+    margin-right: 12px;
+    font-size: 15px;
+    width: 33px;
+    height: 33px;
   }
 
-  .content{
+  .content {
     padding: 10px;
   }
 
-  .left-part{
+  .left-part {
     display: none;
   }
 
-  .right-part{
+  .right-part {
     width: 100%;
     padding: 0;
   }
 
-  #pagination{
+  #pagination {
     margin-bottom: 15px;
   }
 
@@ -260,7 +262,7 @@ nav ul {
     width: calc(50% - 1rem);
   }
 
-  #bars{
+  #bars {
     display: none;
   }
 }
