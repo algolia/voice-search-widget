@@ -13,6 +13,6 @@ let obj = {
     "client_x509_cert_url": process.env.CRED_CLIENT_CERT_URL,
 }
 
-fs.writeFile('config/gcp-credentials.json', JSON.stringify(obj), 'utf8', () => {
+fs.writeFile('./config/gcp-credentials.json', JSON.stringify(obj), 'utf8', () => {
     console.log("done");
 });
