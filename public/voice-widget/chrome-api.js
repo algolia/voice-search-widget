@@ -5,12 +5,10 @@ class ChromeAPI {
 
   configureAPI(mic, searchInput, wave, initOptions) {
     this.recognition = new webkitSpeechRecognition();
-    console.log("Chrome API is working");
 
     this.recognition.interimResults = true;
 
     this.recognition.onresult = function(event) {
-      console.log(event.results[0][0]);
       let query = event.results[0][0].transcript;
       initOptions.helper.setQuery(query).search(); //Set the query and search
       setTimeout(function(){
