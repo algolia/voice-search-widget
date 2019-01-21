@@ -1,6 +1,6 @@
 import VoiceWidget from "./voice-widget/voice-widget.js";
 
-var socket = io.connect("http://localhost:8181/");
+var socket = io.connect("https://voice-search-demo.herokuapp.com/");
 
 socket.on("connect", function() {});
 

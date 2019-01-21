@@ -3,7 +3,18 @@ const gcpSpeech = require("@google-cloud/speech");
 class GcpAPI {
   constructor() {
     this.recognizeStream = null;
-    this.gcpClient = new gcpSpeech.SpeechClient();
+
+    const decodedCredentials = Buffer.from(process.env.SPEECH_GCP_CREDENTIALS, 'base64').toString('utf8');
+    const credentials = JSON.parse(decodedCredentials);
+
+    this.gcpClient = new gcpSpeech.SpeechClient({
+      credentials: {
+        private_key: credentials['private_key'],
+        client_email: credentials['client_email']
+      },
+      projectId: credentials['project_id'],
+    });
+
     this.encoding = "LINEAR16";
     this.sampleRateHertz = 16000;
     this.languageCode = "en-US";
