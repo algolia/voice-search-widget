@@ -4,15 +4,15 @@ class GcpAPI {
   constructor() {
     this.recognizeStream = null;
 
-    const decodedCreds = Buffer.from(process.env.SPEECH_GCP_CREDENTIALS, 'base64').toString('utf8')
-    const json = JSON.parse(decodedCreds)
-    
+    const decodedCredentials = Buffer.from(process.env.SPEECH_GCP_CREDENTIALS, 'base64').toString('utf8');
+    const credentials = JSON.parse(decodedCredentials);
+
     this.gcpClient = new gcpSpeech.SpeechClient({
       credentials: {
-        private_key: json['private_key'],
-        client_email: json['client_email']
+        private_key: credentials['private_key'],
+        client_email: credentials['client_email']
       },
-      projectId: json['project_id'],
+      projectId: credentials['project_id'],
     });
 
     this.encoding = "LINEAR16";
