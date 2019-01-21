@@ -54,7 +54,10 @@ search.addWidget(
 
 ### Requirements
 
-To use this widget, you need to create an account on GCP to get credentials and then create a credentials file in the config folder (based on the credentials example file).
+To use this widget, you need to create an account on GCP to get credentials and then:
+* Base64 encode the credentials (the Javascript Object)
+* Define a new environement variable called SPEECH_GCP_CREDENTIALS with the value of the base64 encoded
+* You're good to go!
 
 ## Known limitations
 
