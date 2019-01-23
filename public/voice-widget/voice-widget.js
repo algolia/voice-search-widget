@@ -7,7 +7,9 @@ const gcpAPI = new GcpAPI();
 class VoiceWidget {
   constructor(options) {
     Object.assign(this, options);
-    this.isTranscripting = false;
+    this.isTranscripting = {
+      state: false
+    }
   }
 
   init(initOptions) {
@@ -44,7 +46,7 @@ class VoiceWidget {
 
     /*** Google Chrome API ***/
     if (this._isChromeAPIAvailable()) {
-      chromeAPI.configureAPI(mic, searchInput, wave, initOptions);
+      chromeAPI.configureAPI(mic, searchInput, wave, initOptions, this.isTranscripting);
     } else {
       /*** GCP Speech-To-Text API ***/
       gcpAPI.configureAPI(this.socket, searchInput, initOptions);
@@ -55,7 +57,7 @@ class VoiceWidget {
       if (that.processor == "gcp") {
         gcpAPI.stopTranscription(this.socket);
       }
-      this.isTranscripting = false;
+      this.isTranscripting.state = false;
       mic.innerHTML = '<i class="fas fa-microphone"></i>';
       wave.classList.add("hidden");
       searchInput.style.paddingLeft = "10px";
@@ -70,19 +72,30 @@ class VoiceWidget {
       searchInput.style.paddingLeft = "55px";
       /*** Chrome API ***/
       if (that._isChromeAPIAvailable()) {
-        chromeAPI.startTranscription(mic, searchInput);
+        if (that.isTranscripting.state) {
+          console.log("coucou, stop transcipting..");
+          chromeAPI.stopTranscription();
+          that.isTranscripting.state = false;
+          mic.innerHTML = '<i class="fas fa-microphone"></i>';
+          wave.classList.add("hidden");
+          searchInput.style.paddingLeft = "10px";
+        } else {
+          console.log("coucou, transcipting..");
+          chromeAPI.startTranscription(mic, searchInput);
+          that.isTranscripting.state = true;
+        }
       } else {
         if (that.processor == "gcp") {
           /*** GCP Speech-To-Text API ***/
-          if (that.isTranscripting) {
+          if (that.isTranscripting.state) {
             gcpAPI.stopTranscription(that.socket);
-            that.isTranscripting = false;
+            that.isTranscripting.state = false;
             mic.innerHTML = '<i class="fas fa-microphone"></i>';
             wave.classList.add("hidden");
             searchInput.style.paddingLeft = "10px";
           } else {
             gcpAPI.startTranscription(mic, that.socket);
-            that.isTranscripting = true;
+            that.isTranscripting.state = true;
           }
         }
       }
@@ -99,7 +112,7 @@ class VoiceWidget {
 
   render(renderOptions) {
     const searchInput = document.getElementById("algolia-search-input");
-       
+
     if (renderOptions.results.userData) {
       let action = renderOptions.results.userData[0].action;
       if (action == "clear-input") {

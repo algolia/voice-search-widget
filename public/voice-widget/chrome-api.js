@@ -3,7 +3,7 @@ class ChromeAPI {
     this.recognition = null;
   }
 
-  configureAPI(mic, searchInput, wave, initOptions) {
+  configureAPI(mic, searchInput, wave, initOptions, transcripting) {
     this.recognition = new webkitSpeechRecognition();
 
     this.recognition.interimResults = true;
@@ -15,6 +15,7 @@ class ChromeAPI {
         mic.innerHTML = '<i class="fas fa-microphone"></i>';
         wave.classList.add("hidden");
         searchInput.style.paddingLeft = "10px";
+        transcripting.state = false;
       }, 1000);
       searchInput.value = query;
     };
@@ -22,6 +23,10 @@ class ChromeAPI {
 
   startTranscription(mic, searchInput) {
     this.recognition.start();
+  }
+
+  stopTranscription(){
+    this.recognition.stop();
   }
 }
 
