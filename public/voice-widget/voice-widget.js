@@ -51,7 +51,7 @@ class VoiceWidget {
     }
 
     //Stopping the speech recognition if the user stopped talking
-    this.socket.on("endSpeechRecognition", (_) => {
+    this.socket.on("endSpeechRecognition", _ => {
       if (that.processor == "gcp") {
         gcpAPI.stopTranscription(this.socket);
       }
@@ -64,7 +64,8 @@ class VoiceWidget {
     //Start/Stop mic on click
     let that = this;
     mic.addEventListener("click", function(e) {
-      mic.innerHTML = '<i class="fas fa-dot-circle blink" style="color: red;"></i>';
+      mic.innerHTML =
+        '<i class="fas fa-dot-circle blink" style="color: red;"></i>';
       wave.classList.remove("hidden");
       searchInput.style.paddingLeft = "55px";
       /*** Chrome API ***/
@@ -89,8 +90,22 @@ class VoiceWidget {
 
     searchInput.addEventListener("keyup", function(e) {
       let value = searchInput.value;
-      initOptions.helper.setQuery(value).search(); //Set the query and search
+      initOptions.helper
+        .setQueryParameter("optionalWords", value)
+        .setQuery(value)
+        .search(); //Set the query and search
     });
+  }
+
+  render(renderOptions) {
+    const searchInput = document.getElementById("algolia-search-input");
+       
+    if (renderOptions.results.userData) {
+      let action = renderOptions.results.userData[0].action;
+      if (action == "clear-input") {
+        searchInput.value = "";
+      }
+    }
   }
 
   _isChromeAPIAvailable() {
