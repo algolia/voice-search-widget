@@ -1,6 +1,6 @@
 # Voice Search Widget
 
-🎥 **[See it live on CodeSandbox](https://codesandbox.io/s/github/algolia/instantsearch-labs/tree/master/example/instantsearch.js).**
+🎥 **[See it live](https://preview.algolia.com/voice-search-demo/).**
 
 ## Demo
 
