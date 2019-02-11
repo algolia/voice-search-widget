@@ -51,8 +51,8 @@ class GcpAPI {
   _startRecording(stream, socket) {
     socket.emit("startStream", {});
 
-    AudioContext = window.AudioContext || window.webkitAudioContext;
-    let audioContext = new AudioContext();
+    let MyAudioCtx = window.AudioContext || window.webkitAudioContext;
+    let audioContext = new MyAudioCtx();
 
     this.myStream = stream;
 
