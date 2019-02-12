@@ -73,14 +73,12 @@ class VoiceWidget {
       /*** Chrome API ***/
       if (that._isChromeAPIAvailable()) {
         if (that.isTranscripting.state) {
-          console.log("coucou, stop transcipting..");
           chromeAPI.stopTranscription();
           that.isTranscripting.state = false;
           mic.innerHTML = '<i class="fas fa-microphone"></i>';
           wave.classList.add("hidden");
           searchInput.style.paddingLeft = "10px";
         } else {
-          console.log("coucou, transcipting..");
           chromeAPI.startTranscription(mic, searchInput);
           that.isTranscripting.state = true;
         }
